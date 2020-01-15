@@ -1,18 +1,18 @@
 package e
 
 const (
-	SUCCESS        = 200
-	ERROR          = 500
-	INVALID_PARAMS = 400
+	SUCCESS          = 200
+	ERROR            = 500
+	ErrInvalidParams = 400
 
-	ERROR_AUTH_CHECK_TOKEN_FAIL    = 20001
-	ERROR_AUTH_CHECK_TOKEN_TIMEOUT = 20002
-	ERROR_AUTH_TOKEN               = 20003
-	ERROR_AUTH                     = 20004
+	ErrAuthCheckTokenFail    = 20001
+	ErrAuthCheckTokenTimeout = 20002
+	ErrAuthToken             = 20003
+	ErrAuth                  = 20004
 
-	ERROR_GET_RECORD_FAILD = 30001
+	ErrGetRecordFailed = 30001
 
-	ERROR_USER_ALREADY_EXISTS = 40001
-	ERROR_CRETE_USER          = 40002
-	ERROR_GET_ALL_GROUP       = 40003
+	ErrUserAlreadyExists = 40001
+	ErrCreateUser        = 40002
+	ErrGetAllGroup       = 40003
 )

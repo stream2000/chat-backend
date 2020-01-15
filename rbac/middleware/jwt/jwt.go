@@ -17,15 +17,15 @@ func JWT() gin.HandlerFunc {
 		code = e.SUCCESS
 		token := c.Request.Header.Get("Authorization")
 		if token == "" {
-			code = e.INVALID_PARAMS
+			code = e.ErrInvalidParams
 		} else {
 			token, err := util.ParseToken(token)
 			if err != nil {
 				switch err.(*jwt.ValidationError).Errors {
 				case jwt.ValidationErrorExpired:
-					code = e.ERROR_AUTH_CHECK_TOKEN_TIMEOUT
+					code = e.ErrAuthCheckTokenTimeout
 				default:
-					code = e.ERROR_AUTH_CHECK_TOKEN_FAIL
+					code = e.ErrAuthCheckTokenFail
 				}
 			} else {
 				c.Set("uid", token.Id)
