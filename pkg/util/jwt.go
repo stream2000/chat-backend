@@ -1,6 +1,7 @@
 package util
 
 import (
+	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -58,4 +59,18 @@ func ParseToken(token string) (*Claims, error) {
 	}
 
 	return nil, err
+}
+
+func ParseBearerHeader(header string) (token string) {
+	s := strings.SplitN(header, " ", 2)
+	if len(s) != 2 {
+		return
+	} else {
+		authType := s[0]
+		if authType != "Bearer" {
+			return ""
+		}
+		token = s[1]
+		return
+	}
 }

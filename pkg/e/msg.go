@@ -1,17 +1,18 @@
 package e
 
 var MsgFlags = map[int]string{
-	SUCCESS: "ok",
-	ERROR:   "fail",
-	//ErrInvalidParams:         "请求参数错误",
-	//ErrAuthCheckTokenFail:    "Token鉴权失败",
-	//ErrAuthCheckTokenTimeout: "Token已超时",
-	//ErrAuthToken:             "Token生成失败",
-	//ErrAuth:                  "Token错误",
-	//ErrGetRecordFailed:       "读取打卡记录错误",
-	//ErrUserAlreadyExists:     "用户已经存在，请考虑重试",
-	//ErrCreateUser:            "创建用户时出错",
-	//ErrGetAllGroup:           "获取小组信息时出错",
+	SUCCESS:                 "ok",
+	ERROR:                   "fail",
+	ErrInvalidParams:        "请求参数错误",
+	ErrUnKnownInternalError: "未知服务器内部错误，请稍后重试",
+
+	ErrInvalidBasicAuthParam: "Basic认证参数错误",
+	ErrBasicAuthFailed:       "未通过Basic认证",
+
+	ErrInvalidBearerAuthParams: "Bearer认证参数错误",
+	ErrAuthCheckTokenFail:      "Token鉴权失败",
+	ErrAuthCheckTokenTimeout:   "Token已超时",
+	ErrJwtAuth:                 "Token生成失败",
 }
 
 // GetMsg get error information based on Code

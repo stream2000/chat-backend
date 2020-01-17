@@ -7,7 +7,6 @@ import (
 	"m4-im/pkg/response"
 	"m4-im/pkg/util"
 	"net/http"
-	"strings"
 )
 
 // JWT is jwt middleware
@@ -16,7 +15,7 @@ func JWT() gin.HandlerFunc {
 		var code int = e.SUCCESS
 		rsp := response.NewResponseBuilder(c)
 
-		token := parseBearerHeader(c.GetHeader("Authorization"))
+		token := util.ParseBearerHeader(c.GetHeader("Authorization"))
 		if token == "" {
 			code = e.ErrInvalidBearerAuthParams
 		} else {
@@ -39,19 +38,5 @@ func JWT() gin.HandlerFunc {
 			return
 		}
 		c.Next()
-	}
-}
-
-func parseBearerHeader(header string) (token string) {
-	s := strings.SplitN(header, " ", 2)
-	if len(s) != 2 {
-		return
-	} else {
-		authType := s[0]
-		if authType != "Bearer" {
-			return ""
-		}
-		token = s[1]
-		return
 	}
 }
