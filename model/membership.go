@@ -1,20 +1,21 @@
-package models
+package model
 
 import (
 	"fmt"
+	"github.com/jinzhu/gorm"
 	"time"
 )
 
 type _MembershipMgr struct {
-	*BaseMgr
+	*_BaseMgr
 }
 
 // MembershipMgr open func
-func MembershipMgr() *_MembershipMgr {
+func MembershipMgr(db *gorm.DB) *_MembershipMgr {
 	if db == nil {
 		panic(fmt.Errorf("MembershipMgr need init by db"))
 	}
-	return &_MembershipMgr{BaseMgr: &BaseMgr{DB: db, isRelated: globalIsRelated}}
+	return &_MembershipMgr{_BaseMgr: &_BaseMgr{DB: db, isRelated: globalIsRelated}}
 }
 
 // GetTableName get sql table name.获取数据库名字

@@ -9,15 +9,16 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
+	"m4-im/dao"
 	"m4-im/pkg/setting"
-	rbac "m4-im/rbac/util"
+	"m4-im/pkg/util"
 	"m4-im/routers"
 	"net/http"
 )
 
 func init() {
-	setting.Setup()
-	rbac.Setup()
+	util.Setup()
+	dao.Setup()
 }
 func main() {
 	gin.SetMode(setting.ServerSetting.RunMode)

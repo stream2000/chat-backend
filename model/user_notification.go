@@ -1,20 +1,21 @@
-package models
+package model
 
 import (
 	"fmt"
+	"github.com/jinzhu/gorm"
 	"time"
 )
 
 type _UserNotificationMgr struct {
-	*BaseMgr
+	*_BaseMgr
 }
 
 // UserNotificationMgr open func
-func UserNotificationMgr() *_UserNotificationMgr {
+func UserNotificationMgr(db *gorm.DB) *_UserNotificationMgr {
 	if db == nil {
 		panic(fmt.Errorf("UserNotificationMgr need init by db"))
 	}
-	return &_UserNotificationMgr{BaseMgr: &BaseMgr{DB: db, isRelated: globalIsRelated}}
+	return &_UserNotificationMgr{_BaseMgr: &_BaseMgr{DB: db, isRelated: globalIsRelated}}
 }
 
 // GetTableName get sql table name.获取数据库名字

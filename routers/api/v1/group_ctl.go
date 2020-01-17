@@ -6,7 +6,7 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	"m4-im/rbac/middleware/jwt"
+	"m4-im/middleware"
 )
 
 func CreateGroup(c *gin.Context) {
@@ -30,7 +30,7 @@ func GetAllGroupsByMultiTags(c *gin.Context) {
 }
 
 func InitGroupController(g *gin.RouterGroup) {
-	g.Use(jwt.JWT())
+	g.Use(middleware.JWT())
 	{
 		g.GET("/info", GetGroupInfo)
 		g.GET("/all", GetAllGroups)

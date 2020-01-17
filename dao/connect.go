@@ -2,10 +2,11 @@
 @Time : 2020/1/15 21:02
 @Author : Minus4
 */
-package models
+package dao
 
 import (
 	"fmt"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	"log"
 	"m4-im/pkg/setting"
@@ -23,9 +24,9 @@ func Setup() {
 		setting.DatabaseSetting.Name))
 
 	if err != nil {
-		log.Fatalf("models.Setup err: %v", err)
+		log.Fatalf("dao.Setup err: %v", err)
 	}
-
+	db.SingularTable(true)
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(100)
 }

@@ -35,10 +35,14 @@ func (r *Rsp) Response(httpCode int) {
 	return
 }
 
-func NewJsonResponse(ctx *gin.Context) *Rsp {
+func NewResponseBuilder(ctx *gin.Context) *Rsp {
 	return &Rsp{
 		C:    ctx,
 		Data: nil,
 		Code: e.SUCCESS,
 	}
+}
+
+func InValidParamResponse() {
+
 }

@@ -1,20 +1,21 @@
-package models
+package model
 
 import (
 	"fmt"
+	"github.com/jinzhu/gorm"
 	"time"
 )
 
 type _UserMgr struct {
-	*BaseMgr
+	*_BaseMgr
 }
 
 // UserMgr open func
-func UserMgr() *_UserMgr {
+func UserMgr(db *gorm.DB) *_UserMgr {
 	if db == nil {
 		panic(fmt.Errorf("UserMgr need init by db"))
 	}
-	return &_UserMgr{BaseMgr: &BaseMgr{DB: db, isRelated: globalIsRelated}}
+	return &_UserMgr{_BaseMgr: &_BaseMgr{DB: db, isRelated: globalIsRelated}}
 }
 
 // GetTableName get sql table name.获取数据库名字

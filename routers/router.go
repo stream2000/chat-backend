@@ -6,6 +6,10 @@ package routers
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
+	"gopkg.in/go-playground/validator.v9"
+	"m4-im/middleware"
+	"m4-im/pkg/validate"
 	apiV1 "m4-im/routers/api/v1"
 )
 
@@ -13,6 +17,14 @@ func InitRouter() *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
+
+	// Setup validator
+	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
+		validate.SetupValidator(v)
+	}
+
+	// Use validation error handler -> handle binding errors
+	r.Use(middleware.ValidateErrorHandler(validate.Uni))
 
 	// Init group Admin Controller
 	groupAdminController := r.Group("api/v1/group/admin/:group_id")

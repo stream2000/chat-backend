@@ -29,6 +29,9 @@ type App struct {
 	LogSaveName string
 	LogFileExt  string
 	TimeFormat  string
+
+	Salt1 string
+	Salt2 string
 }
 
 var AppSetting = &App{}
@@ -76,7 +79,7 @@ var RedisSetting = &Redis{}
 var cfg *ini.File
 
 // Setup initialize the configuration instance
-func Setup() {
+func init() {
 	var err error
 	cfg, err = ini.Load("conf/app.ini")
 	if err != nil {

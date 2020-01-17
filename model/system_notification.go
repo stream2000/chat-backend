@@ -1,20 +1,21 @@
-package models
+package model
 
 import (
 	"fmt"
+	"github.com/jinzhu/gorm"
 	"time"
 )
 
 type _SystemNotificationMgr struct {
-	*BaseMgr
+	*_BaseMgr
 }
 
 // SystemNotificationMgr open func
-func SystemNotificationMgr() *_SystemNotificationMgr {
+func SystemNotificationMgr(db *gorm.DB) *_SystemNotificationMgr {
 	if db == nil {
 		panic(fmt.Errorf("SystemNotificationMgr need init by db"))
 	}
-	return &_SystemNotificationMgr{BaseMgr: &BaseMgr{DB: db, isRelated: globalIsRelated}}
+	return &_SystemNotificationMgr{_BaseMgr: &_BaseMgr{DB: db, isRelated: globalIsRelated}}
 }
 
 // GetTableName get sql table name.获取数据库名字

@@ -1,20 +1,21 @@
-package models
+package model
 
 import (
 	"fmt"
+	"github.com/jinzhu/gorm"
 	"time"
 )
 
 type _TagMgr struct {
-	*BaseMgr
+	*_BaseMgr
 }
 
 // TagMgr open func
-func TagMgr() *_TagMgr {
+func TagMgr(db *gorm.DB) *_TagMgr {
 	if db == nil {
 		panic(fmt.Errorf("TagMgr need init by db"))
 	}
-	return &_TagMgr{BaseMgr: &BaseMgr{DB: db, isRelated: globalIsRelated}}
+	return &_TagMgr{_BaseMgr: &_BaseMgr{DB: db, isRelated: globalIsRelated}}
 }
 
 // GetTableName get sql table name.获取数据库名字

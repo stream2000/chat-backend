@@ -4,31 +4,24 @@
 */
 package service
 
-import "m4-im/models"
+import (
+	"m4-im/dao"
+	"m4-im/pkg/util"
+	"m4-im/pojo/params"
+)
 
-func Register() (err error) {
-	db := models.GetDB()
-	tx := db.Begin()
-	defer func() {
-		if nil == err {
-			tx.Commit()
-		} else {
-			tx.Rollback()
-		}
-	}()
+func Register(param params.RegisterParam) (err error) {
+	err = dao.AddUser(param)
 	return
 }
 
-func Auth() (err error) {
-	db := models.GetDB()
-	tx := db.Begin()
-	defer func() {
-		if nil == err {
-			tx.Commit()
-		} else {
-			tx.Rollback()
-		}
-	}()
+func Auth(email, password string) (bool, string) {
+	userInfo, err := dao.GetUserInfoByEmail(email)
+	if err != nil {
+		return false, ""
+	}
+	storedSum := userInfo.Password
+	currentSum := util.EncryptAccount(email, password)
 
-	return
+	return storedSum == currentSum, userInfo.ID
 }

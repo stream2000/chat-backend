@@ -6,7 +6,7 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	"m4-im/rbac/middleware/jwt"
+	"m4-im/middleware"
 )
 
 func DisbandGroup(c *gin.Context) {
@@ -31,7 +31,7 @@ func SetGroupManagementInformation(c *gin.Context) {
 }
 
 func InitGroupAdminController(g *gin.RouterGroup) {
-	g.Use(jwt.JWT())
+	g.Use(middleware.JWT())
 	{
 		g.POST("/disband", DisbandGroup)
 		g.POST("/addManager", AddManager)
