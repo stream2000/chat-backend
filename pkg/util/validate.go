@@ -30,7 +30,3 @@ func AbortWithBindError(c *gin.Context, err error) {
 	_ = c.Error(err).SetType(gin.ErrorTypeBind)
 	c.Abort()
 }
-
-func AbortWithInvalidBasicAuthError(c *gin.Context) {
-
-}

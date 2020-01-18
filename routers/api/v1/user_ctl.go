@@ -6,8 +6,8 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	"m4-im/middleware"
 	"m4-im/pkg/e"
+	"m4-im/pkg/middleware"
 	"m4-im/pkg/response"
 	"m4-im/pkg/util"
 	"m4-im/pojo/params"
@@ -17,26 +17,25 @@ import (
 
 func Register(c *gin.Context) {
 	rsp := response.NewResponseBuilder(c)
-	rsp.Code = e.SUCCESS
 
 	var param params.RegisterParam
 	if err := c.ShouldBindJSON(&param); err == nil {
 		err = service.Register(param)
 		if err != nil {
-			rsp.Code = e.ErrUnKnownInternalError
-			rsp.Msg = err.Error()
-			rsp.Response(http.StatusInternalServerError)
+			rsp.Code = err.(*service.WarpedError).Code
+			rsp.Msg = err.(*service.WarpedError).Error()
+			rsp.Response(http.StatusBadRequest)
 			return
 		}
 		rsp.Response(http.StatusOK)
 	} else {
 		util.AbortWithBindError(c, err)
+		return
 	}
 }
 
 func Auth(c *gin.Context) {
 	rsp := response.NewResponseBuilder(c)
-	rsp.Code = e.SUCCESS
 
 	basicAuthHeader := c.GetHeader("Authorization")
 	email, password, err := util.ParseBasicHeader(basicAuthHeader)
@@ -64,10 +63,6 @@ func Auth(c *gin.Context) {
 		"token": token,
 	}
 	rsp.Response(http.StatusOK)
-}
-
-func RefreshToken(c *gin.Context) {
-
 }
 
 func SetBasicInfo(c *gin.Context) {

@@ -28,16 +28,16 @@ func TestRegister(t *testing.T) {
 	//}
 	//err := Register(arg1)
 	//if err != nil {
-	//	t.Error(err)
+	//	t.WarpedError(err)
 	//}
 	//err = Register(arg1)
 	//if err == nil {
-	//	t.Error("Already")
+	//	t.WarpedError("Already")
 	//} else {
 	//	fmt.Println(err)
 	//}
 	//ok := Auth(arg1.Email, arg1.Password)
 	//if !ok {
-	//	t.Error("Can't pass auth")
+	//	t.WarpedError("Can't pass auth")
 	//}
 }

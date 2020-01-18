@@ -5,11 +5,19 @@
 package dao
 
 import (
+	"database/sql"
+	"errors"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	"log"
 	"m4-im/pkg/setting"
+)
+
+var (
+	ErrRecordNotFound = errors.New("记录不存在")
+	ErrRecordDeleted  = errors.New("记录已被删除")
+	ErrRecordExists   = errors.New("记录已存在")
 )
 
 var db *gorm.DB
@@ -36,6 +44,9 @@ func ReConnect() {
 
 func GetDB() *gorm.DB {
 	return db
+}
+func RawDB() *sql.DB {
+	return db.DB()
 }
 
 // CloseDB closes database connection (unnecessary)

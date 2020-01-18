@@ -11,10 +11,15 @@ const (
 	ErrInvalidBasicAuthParam
 	ErrBasicAuthFailed
 
-	// #2 Jwt Auth
+	// #2 Auth
 	ErrInvalidBearerAuthParams
 	ErrAuthCheckTokenFail
 	ErrAuthCheckTokenTimeout
 	ErrJwtAuth
-	//
+	ErrUnAuthorized
+	// #3 User
+	ErrUserNotFound
+	// #4 Group
+	ErrDeleteGroup
+	ErrGroupNotFound
 )

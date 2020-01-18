@@ -13,3 +13,8 @@ type AuthParam struct {
 	Email    string `binding:"required"`
 	Password string `binding:"required"`
 }
+
+type AddNewGroupParam struct {
+	GroupName string `json:"group_name" binding:"required"`
+	Info      string `json:"description"`
+}

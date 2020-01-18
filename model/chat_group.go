@@ -49,9 +49,9 @@ func (obj *_ChatGroupMgr) WithGroupName(GroupName string) Option {
 	return optionFunc(func(o *options) { o.query["group_name"] = GroupName })
 }
 
-// WithInfo info获取
-func (obj *_ChatGroupMgr) WithInfo(Info string) Option {
-	return optionFunc(func(o *options) { o.query["info"] = Info })
+// WithCreatedAt created_at获取
+func (obj *_ChatGroupMgr) WithCreatedAt(CreatedAt time.Time) Option {
+	return optionFunc(func(o *options) { o.query["created_at"] = CreatedAt })
 }
 
 // WithCreatorID creator_id获取
@@ -59,14 +59,19 @@ func (obj *_ChatGroupMgr) WithCreatorID(CreatorID string) Option {
 	return optionFunc(func(o *options) { o.query["creator_id"] = CreatorID })
 }
 
-// WithCreatedAt created_at获取
-func (obj *_ChatGroupMgr) WithCreatedAt(CreatedAt time.Time) Option {
-	return optionFunc(func(o *options) { o.query["created_at"] = CreatedAt })
+// WithInfo info获取
+func (obj *_ChatGroupMgr) WithInfo(Info string) Option {
+	return optionFunc(func(o *options) { o.query["info"] = Info })
 }
 
 // WithTags tags获取
 func (obj *_ChatGroupMgr) WithTags(Tags string) Option {
 	return optionFunc(func(o *options) { o.query["tags"] = Tags })
+}
+
+// WithStatus status获取
+func (obj *_ChatGroupMgr) WithStatus(Status int) Option {
+	return optionFunc(func(o *options) { o.query["status"] = Status })
 }
 
 // GetByOption 功能选项模式获取
@@ -127,16 +132,16 @@ func (obj *_ChatGroupMgr) GetBatchFromGroupName(GroupNames []string) (results []
 	return
 }
 
-// GetFromInfo 通过info获取内容
-func (obj *_ChatGroupMgr) GetFromInfo(Info string) (results []*ChatGroup, err error) {
-	err = obj.DB.Table(obj.GetTableName()).Where("info = ?", Info).Find(&results).Error
+// GetFromCreatedAt 通过created_at获取内容
+func (obj *_ChatGroupMgr) GetFromCreatedAt(CreatedAt time.Time) (results []*ChatGroup, err error) {
+	err = obj.DB.Table(obj.GetTableName()).Where("created_at = ?", CreatedAt).Find(&results).Error
 
 	return
 }
 
-// GetBatchFromInfo 批量唯一主键查找
-func (obj *_ChatGroupMgr) GetBatchFromInfo(Infos []string) (results []*ChatGroup, err error) {
-	err = obj.DB.Table(obj.GetTableName()).Where("info IN (?)", Infos).Find(&results).Error
+// GetBatchFromCreatedAt 批量唯一主键查找
+func (obj *_ChatGroupMgr) GetBatchFromCreatedAt(CreatedAts []time.Time) (results []*ChatGroup, err error) {
+	err = obj.DB.Table(obj.GetTableName()).Where("created_at IN (?)", CreatedAts).Find(&results).Error
 
 	return
 }
@@ -155,16 +160,16 @@ func (obj *_ChatGroupMgr) GetBatchFromCreatorID(CreatorIDs []string) (results []
 	return
 }
 
-// GetFromCreatedAt 通过created_at获取内容
-func (obj *_ChatGroupMgr) GetFromCreatedAt(CreatedAt time.Time) (results []*ChatGroup, err error) {
-	err = obj.DB.Table(obj.GetTableName()).Where("created_at = ?", CreatedAt).Find(&results).Error
+// GetFromInfo 通过info获取内容
+func (obj *_ChatGroupMgr) GetFromInfo(Info string) (results []*ChatGroup, err error) {
+	err = obj.DB.Table(obj.GetTableName()).Where("info = ?", Info).Find(&results).Error
 
 	return
 }
 
-// GetBatchFromCreatedAt 批量唯一主键查找
-func (obj *_ChatGroupMgr) GetBatchFromCreatedAt(CreatedAts []time.Time) (results []*ChatGroup, err error) {
-	err = obj.DB.Table(obj.GetTableName()).Where("created_at IN (?)", CreatedAts).Find(&results).Error
+// GetBatchFromInfo 批量唯一主键查找
+func (obj *_ChatGroupMgr) GetBatchFromInfo(Infos []string) (results []*ChatGroup, err error) {
+	err = obj.DB.Table(obj.GetTableName()).Where("info IN (?)", Infos).Find(&results).Error
 
 	return
 }
@@ -179,6 +184,20 @@ func (obj *_ChatGroupMgr) GetFromTags(Tags string) (results []*ChatGroup, err er
 // GetBatchFromTags 批量唯一主键查找
 func (obj *_ChatGroupMgr) GetBatchFromTags(Tagss []string) (results []*ChatGroup, err error) {
 	err = obj.DB.Table(obj.GetTableName()).Where("tags IN (?)", Tagss).Find(&results).Error
+
+	return
+}
+
+// GetFromStatus 通过status获取内容
+func (obj *_ChatGroupMgr) GetFromStatus(Status int) (results []*ChatGroup, err error) {
+	err = obj.DB.Table(obj.GetTableName()).Where("status = ?", Status).Find(&results).Error
+
+	return
+}
+
+// GetBatchFromStatus 批量唯一主键查找
+func (obj *_ChatGroupMgr) GetBatchFromStatus(Statuss []int) (results []*ChatGroup, err error) {
+	err = obj.DB.Table(obj.GetTableName()).Where("status IN (?)", Statuss).Find(&results).Error
 
 	return
 }

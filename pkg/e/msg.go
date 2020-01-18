@@ -8,11 +8,15 @@ var MsgFlags = map[int]string{
 
 	ErrInvalidBasicAuthParam: "Basic认证参数错误",
 	ErrBasicAuthFailed:       "未通过Basic认证",
+	ErrUnAuthorized:          "你没有权限进行这个操作",
 
 	ErrInvalidBearerAuthParams: "Bearer认证参数错误",
 	ErrAuthCheckTokenFail:      "Token鉴权失败",
 	ErrAuthCheckTokenTimeout:   "Token已超时",
 	ErrJwtAuth:                 "Token生成失败",
+	ErrUserNotFound:            "用户不存在",
+	ErrGroupNotFound:           "群组不存在",
+	ErrDeleteGroup:             "解散群组错误，请检查参数",
 }
 
 // GetMsg get error information based on Code

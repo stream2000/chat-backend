@@ -64,6 +64,11 @@ func (obj *_UserMgr) WithCreatedAt(CreatedAt time.Time) Option {
 	return optionFunc(func(o *options) { o.query["created_at"] = CreatedAt })
 }
 
+// WithStatus status获取
+func (obj *_UserMgr) WithStatus(Status int) Option {
+	return optionFunc(func(o *options) { o.query["status"] = Status })
+}
+
 // GetByOption 功能选项模式获取
 func (obj *_UserMgr) GetByOption(opts ...Option) (result User, err error) {
 	options := options{
@@ -160,6 +165,20 @@ func (obj *_UserMgr) GetFromCreatedAt(CreatedAt time.Time) (results []*User, err
 // GetBatchFromCreatedAt 批量唯一主键查找
 func (obj *_UserMgr) GetBatchFromCreatedAt(CreatedAts []time.Time) (results []*User, err error) {
 	err = obj.DB.Table(obj.GetTableName()).Where("created_at IN (?)", CreatedAts).Find(&results).Error
+
+	return
+}
+
+// GetFromStatus 通过status获取内容
+func (obj *_UserMgr) GetFromStatus(Status int) (results []*User, err error) {
+	err = obj.DB.Table(obj.GetTableName()).Where("status = ?", Status).Find(&results).Error
+
+	return
+}
+
+// GetBatchFromStatus 批量唯一主键查找
+func (obj *_UserMgr) GetBatchFromStatus(Statuss []int) (results []*User, err error) {
+	err = obj.DB.Table(obj.GetTableName()).Where("status IN (?)", Statuss).Find(&results).Error
 
 	return
 }
