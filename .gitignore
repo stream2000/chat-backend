@@ -2,3 +2,5 @@
 runtime/*
 
 conf/app.ini
+.DS_Store
+pkg/.DS_Store
