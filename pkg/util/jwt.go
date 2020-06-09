@@ -1,6 +1,7 @@
 package util
 
 import (
+	"strconv"
 	"strings"
 	"time"
 
@@ -25,18 +26,18 @@ type Claims struct {
 }
 
 // GenerateToken generate tokens used for auth
-func GenerateToken(email, password, id string) (string, error) {
+func GenerateToken(account string, password string, id int) (string, error) {
 	nowTime := time.Now()
 	expireTime := nowTime.Add(3 * time.Hour * 100)
 
 	claims := Claims{
-		EncodeMD5(email),
+		EncodeMD5(string(account)),
 		EncodeMD5(password),
 		NormalUser,
 		jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
 			Issuer:    "minus4.cn",
-			Id:        id,
+			Id:        strconv.Itoa(id),
 		},
 	}
 
@@ -62,7 +63,7 @@ func ParseToken(token string) (*Claims, error) {
 }
 
 func ParseBearerHeader(header string) (token string) {
-	s := strings.SplitN(header, " ", 2)
+	s := strings.SplitN(header, ":", 2)
 	if len(s) != 2 {
 		return
 	} else {

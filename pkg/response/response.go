@@ -3,6 +3,7 @@ package response
 import (
 	"github.com/gin-gonic/gin"
 	"m4-im/pkg/e"
+	"net/http"
 )
 
 type Rsp struct {
@@ -12,14 +13,22 @@ type Rsp struct {
 	Data interface{} `json:"data"`
 }
 
-func (r *Rsp) SetCode(code int) {
+func (r *Rsp) SetCode(code int) *Rsp {
 	r.Code = code
+	return r
 }
-func (r *Rsp) SetMsg(msg string) {
+func (r *Rsp) SetMsg(msg string) *Rsp {
 	r.Msg = msg
+	return r
 }
-func (r *Rsp) SetData(data interface{}) {
+func (r *Rsp) SetData(data interface{}) *Rsp {
 	r.Data = data
+	return r
+}
+
+func (r *Rsp) OK() {
+	r.Response(http.StatusOK)
+	return
 }
 
 // Rsp setting gin.JSON

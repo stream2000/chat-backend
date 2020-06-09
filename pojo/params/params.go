@@ -5,12 +5,12 @@
 package params
 
 type RegisterParam struct {
-	Email    string `binding:"email,required"`
-	Password string `binding:"max=40,min=1,required"`
+	Account  string
+	Password string
 }
 
 type AuthParam struct {
-	Email    string `binding:"required"`
+	Account  string `binding:"required"`
 	Password string `binding:"required"`
 }
 

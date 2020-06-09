@@ -4,6 +4,7 @@ go 1.13
 
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.5.0
 	github.com/go-ini/ini v1.51.1
 	github.com/go-playground/locales v0.12.1
@@ -13,7 +14,6 @@ require (
 	github.com/gopherjs/gopherjs v0.0.0-20181103185306-d547d1d9531e // indirect
 	github.com/jinzhu/gorm v1.9.12
 	github.com/jtolds/gls v4.2.1+incompatible // indirect
-	github.com/pkg/errors v0.9.1
 	github.com/satori/go.uuid v1.2.0
 	github.com/smartystreets/assertions v0.0.0-20190116191733-b6c0e53d7304 // indirect
 	github.com/smartystreets/goconvey v0.0.0-20181108003508-044398e4856c // indirect

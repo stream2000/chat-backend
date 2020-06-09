@@ -14,7 +14,6 @@ func JWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var code int = e.SUCCESS
 		rsp := response.NewResponseBuilder(c)
-
 		token := util.ParseBearerHeader(c.GetHeader("Authorization"))
 		if token == "" {
 			code = e.ErrInvalidBearerAuthParams
