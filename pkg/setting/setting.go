@@ -37,10 +37,11 @@ type App struct {
 var AppSetting = &App{}
 
 type Server struct {
-	RunMode      string
-	HttpPort     int
-	ReadTimeout  time.Duration
-	WriteTimeout time.Duration
+	RunMode       string
+	HttpPort      int
+	WebSocketPort int
+	ReadTimeout   time.Duration
+	WriteTimeout  time.Duration
 }
 
 var ServerSetting = &Server{}

@@ -4,11 +4,6 @@
 */
 package params
 
-type RegisterParam struct {
-	Account  string
-	Password string
-}
-
 type AuthParam struct {
 	Account  string `binding:"required"`
 	Password string `binding:"required"`
@@ -17,4 +12,8 @@ type AuthParam struct {
 type AddNewGroupParam struct {
 	GroupName string `json:"group_name" binding:"required"`
 	Info      string `json:"description"`
+}
+
+type Hello struct {
+	Name string `json:"name"`
 }

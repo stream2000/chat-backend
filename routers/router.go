@@ -32,6 +32,10 @@ func InitRouter() *gin.Engine {
 	return r
 }
 
+func InitWebSocket() {
+
+}
+
 func registerV1Controllers(g *gin.RouterGroup) {
 	api.InitUserController(g)
 }

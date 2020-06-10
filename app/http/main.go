@@ -13,6 +13,7 @@ import (
 	"m4-im/pkg/setting"
 	"m4-im/pkg/util"
 	"m4-im/routers"
+	"m4-im/routers/websocket"
 	"net/http"
 )
 
@@ -38,5 +39,6 @@ func main() {
 
 	log.Printf("[info] start http server listening %s", endPoint)
 
-	server.ListenAndServe()
+	go server.ListenAndServe()
+	websocket.Serve()
 }
