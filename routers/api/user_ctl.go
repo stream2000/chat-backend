@@ -65,9 +65,8 @@ func GetBasicInfo(c *gin.Context) {
 	otherUsers := make([]*dao.User, 0)
 	db.Table("user").Not("id = ?", userId).Find(&otherUsers)
 
-	sessionIds := make([]int, 0)
 	for _, u := range otherUsers {
-		sessionIds = append(sessionIds, u.Id)
+		u.PassWd = ""
 	}
 
 	data := map[string]interface{}{
@@ -75,7 +74,7 @@ func GetBasicInfo(c *gin.Context) {
 			"name": user.Account,
 			"img":  user.AvatarUrl,
 		},
-		"sessionIds": sessionIds,
+		"sessions": otherUsers,
 	}
 	rsp.Data = data
 	rsp.Response(http.StatusOK)

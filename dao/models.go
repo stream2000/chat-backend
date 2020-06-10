@@ -12,10 +12,10 @@ type Message struct {
 }
 
 type User struct {
-	Id        int
-	Account   string
+	Id        int    `json:"id"`
+	Account   string `json:"name"`
 	PassWd    string `gorm:"column:passwd"`
-	AvatarUrl string
+	AvatarUrl string `json:"img"`
 }
 
 type Consume struct {
