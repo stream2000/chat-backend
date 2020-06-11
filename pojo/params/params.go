@@ -16,4 +16,5 @@ type AddNewGroupParam struct {
 
 type Hello struct {
 	Name string `json:"name"`
+	Jwt  string `json:"jwt"`
 }

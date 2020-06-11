@@ -7,10 +7,17 @@ package routers
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
+	"github.com/googollee/go-engine.io"
+	"github.com/googollee/go-engine.io/transport"
+	"github.com/googollee/go-engine.io/transport/polling"
+	"github.com/googollee/go-engine.io/transport/websocket"
+	"github.com/googollee/go-socket.io"
 	"gopkg.in/go-playground/validator.v9"
+	"log"
 	"m4-im/pkg/middleware"
 	"m4-im/pkg/validate"
 	"m4-im/routers/api"
+	"net/http"
 )
 
 func InitRouter() *gin.Engine {
@@ -27,15 +34,27 @@ func InitRouter() *gin.Engine {
 	r.Use(middleware.ValidateErrorHandler(validate.Uni))
 
 	v1Group := r.Group("api/")
-	registerV1Controllers(v1Group)
+	api.InitUserController(v1Group)
 
 	return r
 }
 
-func InitWebSocket() {
+func InitWebSocketRouter() *socketio.Server {
+	pt := polling.Default
+	wt := websocket.Default
+	wt.CheckOrigin = func(req *http.Request) bool {
+		return true
+	}
 
-}
+	server, err := socketio.NewServer(&engineio.Options{
+		Transports: []transport.Transport{
+			pt,
+			wt,
+		},
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
 
-func registerV1Controllers(g *gin.RouterGroup) {
-	api.InitUserController(g)
+	return server
 }
