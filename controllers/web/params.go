@@ -2,7 +2,7 @@
 @Time : 2020/1/16 16:49
 @Author : Minus4
 */
-package params
+package web
 
 type AuthParam struct {
 	Account  string `binding:"required"`

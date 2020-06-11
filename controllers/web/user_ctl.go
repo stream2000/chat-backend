@@ -11,14 +11,13 @@ import (
 	"m4-im/pkg/middleware"
 	"m4-im/pkg/response"
 	"m4-im/pkg/util"
-	"m4-im/pojo/params"
 	"net/http"
 	"strconv"
 )
 
 func Auth(c *gin.Context) {
 	rsp := response.NewResponseBuilder(c)
-	var param params.AuthParam
+	var param AuthParam
 	if err := c.ShouldBindJSON(&param); err != nil {
 		util.AbortWithBindError(c, err)
 		return
