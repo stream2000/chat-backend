@@ -56,7 +56,7 @@ func ServeWebsocket() {
 	})
 
 	handler := c.Handler(mux)
-	log.Printf("[info] start websockrt server listening %d\n", setting.ServerSetting.WebSocketPort)
+	log.Printf("[info] start websocket server listening %d\n", setting.ServerSetting.WebSocketPort)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", setting.ServerSetting.WebSocketPort), handler))
 }
 func main() {
