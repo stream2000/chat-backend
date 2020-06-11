@@ -10,10 +10,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/rs/cors"
 	"log"
+	"m4-im/controllers"
 	"m4-im/dao"
 	"m4-im/pkg/setting"
 	"m4-im/pkg/util"
-	"m4-im/routers"
 	"net/http"
 )
 
@@ -24,7 +24,7 @@ func init() {
 
 func ServeHttp() {
 	gin.SetMode(setting.ServerSetting.RunMode)
-	routersInit := routers.InitRouter()
+	routersInit := controllers.InitHttpRouter()
 	readTimeout := setting.ServerSetting.ReadTimeout
 	writeTimeout := setting.ServerSetting.WriteTimeout
 	endPoint := fmt.Sprintf(":%d", setting.ServerSetting.HttpPort)
@@ -44,7 +44,7 @@ func ServeHttp() {
 
 func ServeWebsocket() {
 	mux := http.NewServeMux()
-	server := routers.InitWebSocketRouter()
+	server := controllers.InitWebSocketRouter()
 	go server.Serve()
 	defer server.Close()
 	mux.Handle("/socket.io/", server)

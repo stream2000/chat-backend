@@ -2,7 +2,7 @@
 @Time : 2020/1/15 21:53
 @Author : Minus4
 */
-package routers
+package controllers
 
 import (
 	"github.com/gin-gonic/gin"
@@ -14,13 +14,13 @@ import (
 	"github.com/googollee/go-socket.io"
 	"gopkg.in/go-playground/validator.v9"
 	"log"
+	"m4-im/controllers/web"
 	"m4-im/pkg/middleware"
 	"m4-im/pkg/validate"
-	"m4-im/routers/api"
 	"net/http"
 )
 
-func InitRouter() *gin.Engine {
+func InitHttpRouter() *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
@@ -34,7 +34,7 @@ func InitRouter() *gin.Engine {
 	r.Use(middleware.ValidateErrorHandler(validate.Uni))
 
 	v1Group := r.Group("api/")
-	api.InitUserController(v1Group)
+	web.InitUserController(v1Group)
 
 	return r
 }

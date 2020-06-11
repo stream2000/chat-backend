@@ -2,7 +2,7 @@
 @Time : 2020/1/15 21:53
 @Author : Minus4
 */
-package api
+package web
 
 import (
 	"github.com/gin-gonic/gin"
