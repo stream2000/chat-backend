@@ -8,10 +8,10 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/rs/cors"
 	"log"
 	"m4-im/controllers"
 	"m4-im/dao"
+	"m4-im/pkg/middleware"
 	"m4-im/pkg/setting"
 	"m4-im/pkg/util"
 	"net/http"
@@ -43,21 +43,15 @@ func ServeHttp() {
 }
 
 func ServeWebsocket() {
-	mux := http.NewServeMux()
+	router := gin.New()
 	server := controllers.InitWebSocketRouter()
 	go server.Serve()
 	defer server.Close()
-	mux.Handle("/socket.io/", server)
 
-	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:8080"},
-		AllowedMethods:   []string{"GET", "PUT", "OPTIONS", "POST", "DELETE"},
-		AllowCredentials: true,
-	})
-
-	handler := c.Handler(mux)
-	log.Printf("[info] start websocket server listening %d\n", setting.ServerSetting.WebSocketPort)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", setting.ServerSetting.WebSocketPort), handler))
+	router.Use(middleware.GinMiddleware("http://127.0.0.1:8080"))
+	router.GET("/socket.io/", gin.WrapH(server))
+	router.POST("/socket.io/", gin.WrapH(server))
+	router.Run(fmt.Sprintf(":%d", setting.ServerSetting.WebSocketPort))
 }
 func main() {
 	go ServeHttp()

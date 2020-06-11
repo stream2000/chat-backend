@@ -5,6 +5,7 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/googollee/go-engine.io"
@@ -15,6 +16,7 @@ import (
 	"gopkg.in/go-playground/validator.v9"
 	"log"
 	"m4-im/controllers/web"
+	events "m4-im/controllers/websocket"
 	"m4-im/pkg/middleware"
 	"m4-im/pkg/validate"
 	"net/http"
@@ -55,6 +57,18 @@ func InitWebSocketRouter() *socketio.Server {
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	server.OnConnect("/", func(s socketio.Conn) error {
+		s.SetContext("")
+		fmt.Println("connected:", s.ID())
+		return nil
+	})
+	server.OnError("/", func(s socketio.Conn, e error) {
+		fmt.Println("meet error:", e)
+	})
+	server.OnDisconnect("/", func(s socketio.Conn, msg string) {
+		fmt.Println("closed", msg)
+	})
+	server.OnEvent("/", "login", events.OnAuth)
+	server.OnEvent("/", "logoff", events.OnLogOff)
 	return server
 }
