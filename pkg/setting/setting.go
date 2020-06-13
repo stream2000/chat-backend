@@ -6,7 +6,9 @@ package setting
 
 import (
 	"github.com/go-ini/ini"
+	"github.com/sirupsen/logrus"
 	"log"
+	"os"
 	"time"
 )
 
@@ -97,6 +99,16 @@ func init() {
 	ServerSetting.ReadTimeout = ServerSetting.ReadTimeout * time.Second
 	ServerSetting.WriteTimeout = ServerSetting.WriteTimeout * time.Second
 	RedisSetting.IdleTimeout = RedisSetting.IdleTimeout * time.Second
+
+	logrus.SetFormatter(&logrus.TextFormatter{
+		ForceColors:   true,
+		FullTimestamp: true,
+	})
+	logrus.SetFormatter(&logrus.TextFormatter{
+		TimestampFormat: "2006/01/02 15:04:05",
+		FullTimestamp:   true,
+	})
+	logrus.SetOutput(os.Stdout)
 }
 
 // mapTo map section

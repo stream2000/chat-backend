@@ -6,6 +6,7 @@ package web
 
 import (
 	"github.com/gin-gonic/gin"
+	"m4-im/controllers/websocket"
 	"m4-im/dao"
 	"m4-im/pkg/e"
 	"m4-im/pkg/middleware"
@@ -32,6 +33,7 @@ func Auth(c *gin.Context) {
 		u.PassWd = param.Password
 		u.AvatarUrl = "/static/3.jpg"
 		db.Create(u)
+		websocket.AddNewUser(*u)
 	} else {
 		if u.PassWd != param.Password {
 			rsp.SetCode(e.ErrBasicAuthFailed).OK()

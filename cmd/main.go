@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"m4-im/controllers"
+	"m4-im/controllers/websocket"
 	"m4-im/dao"
 	"m4-im/pkg/middleware"
 	"m4-im/pkg/setting"
@@ -20,6 +21,7 @@ import (
 func init() {
 	util.Setup()
 	dao.Setup()
+	websocket.SetUpChannelManager()
 }
 
 func ServeHttp() {
@@ -48,7 +50,7 @@ func ServeWebsocket() {
 	go server.Serve()
 	defer server.Close()
 
-	router.Use(middleware.GinMiddleware("http://127.0.0.1:8080"))
+	router.Use(middleware.GinMiddleware())
 	router.GET("/socket.io/", gin.WrapH(server))
 	router.POST("/socket.io/", gin.WrapH(server))
 	router.Run(fmt.Sprintf(":%d", setting.ServerSetting.WebSocketPort))

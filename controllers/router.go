@@ -54,21 +54,23 @@ func InitWebSocketRouter() *socketio.Server {
 			wt,
 		},
 	})
+
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	server.OnConnect("/", func(s socketio.Conn) error {
 		s.SetContext("")
-		fmt.Println("connected:", s.ID())
 		return nil
 	})
+
 	server.OnError("/", func(s socketio.Conn, e error) {
 		fmt.Println("meet error:", e)
 	})
-	server.OnDisconnect("/", func(s socketio.Conn, msg string) {
-		fmt.Println("closed", msg)
-	})
+
+	server.OnDisconnect("/", events.OnDisconnect)
 	server.OnEvent("/", "login", events.OnAuth)
 	server.OnEvent("/", "logoff", events.OnLogOff)
+	server.OnEvent("/", "msg", events.OnNewMessage)
 	return server
 }
