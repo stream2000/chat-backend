@@ -14,7 +14,7 @@ import (
 var channelManager = &ChannelManager{
 	cIdToChannel:    make(map[string]*channel),
 	userIdToChannel: make(map[string]*channel),
-	users:           map[string]user{},
+	users:           map[string](*user){},
 }
 
 func SetUpChannelManager() {
@@ -27,7 +27,7 @@ func SetUpChannelManager() {
 }
 
 func AddNewUser(u dao.User) {
-	user := user{
+	user := &user{
 		id:           strconv.Itoa(u.Id),
 		messageQueue: make(chan message, 10000),
 		name:         u.Account,
@@ -42,25 +42,24 @@ func AddNewUser(u dao.User) {
 
 type ChannelManager struct {
 	sync.Mutex
-	users           map[string]user
+	users           map[string]*user
 	cIdToChannel    map[string]*channel
 	userIdToChannel map[string]*channel
 }
 
-func (m *ChannelManager) addNewChannel(c *channel) {
-	logrus.Info("Add new channel with id ", c.userId)
+func (m *ChannelManager) addNewChannel(c *channel, id string) {
 	m.Lock()
-	if u, ok := m.users[c.userId]; ok {
-		c.receiveChannel = u.messageQueue
+	if u, ok := m.users[id]; ok {
+		c.u = u
 	} else {
 		panic("unknown new user !!!!!")
 	}
 	for _, c := range channelManager.userIdToChannel {
-		id, _ := strconv.ParseInt(c.userId, 10, 32)
+		id, _ := strconv.ParseInt(c.u.id, 10, 32)
 		c.notifyUserOffline(int(id))
 	}
 	m.cIdToChannel[c.socket.ID()] = c
-	m.userIdToChannel[c.userId] = c
+	m.userIdToChannel[c.u.id] = c
 	m.Unlock()
 }
 
@@ -93,7 +92,7 @@ func (m *ChannelManager) getChannelByCid(id string) (*channel, bool) {
 	return c, ok
 }
 
-func (m *ChannelManager) getUserByUserId(id string) (user, bool) {
+func (m *ChannelManager) getUserByUserId(id string) (*user, bool) {
 	m.Lock()
 	defer m.Unlock()
 	u, ok := m.users[id]

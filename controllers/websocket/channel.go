@@ -9,6 +9,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"m4-im/dao"
 	"strconv"
+	"time"
 )
 
 type user struct {
@@ -17,7 +18,7 @@ type user struct {
 	messageQueue chan message
 }
 
-func (u user) sendNewMessage(sender string, text string) {
+func (u *user) sendNewMessage(sender string, text string) {
 	m := message{
 		topic: "msg",
 		body: map[string]interface{}{
@@ -38,14 +39,13 @@ type message struct {
 }
 
 type channel struct {
-	userId         string
-	receiveChannel chan message
-	socket         socketio.Conn
-	closeChan      chan struct{}
+	u         *user
+	socket    socketio.Conn
+	closeChan chan struct{}
 }
 
 func (c *channel) close() {
-	logrus.Info("Channel with id ", c.userId, " is closed")
+	logrus.Info("Channel with id ", c.u.id, " is closed")
 	select {
 	case c.closeChan <- struct{}{}:
 	default:
@@ -53,13 +53,14 @@ func (c *channel) close() {
 }
 
 func (c *channel) serve() {
-	logrus.Info("Channel with id ", c.userId, " is serving")
+	logrus.Info("Channel with id ", c.u.id, " is serving")
+	time.Sleep(time.Millisecond * 1000)
 	for {
 		select {
 		case <-c.closeChan:
 			return
-		case m := <-c.receiveChannel:
-			logrus.Debugf("send message [%s] ", m.body)
+		case m := <-c.u.messageQueue:
+			logrus.Infof("send message [%s] ", m.body)
 			c.socket.Emit(m.topic, m.body)
 		}
 	}
@@ -71,7 +72,7 @@ func (c *channel) sendNewMessage(text string) {
 		body:  text,
 	}
 	select {
-	case c.receiveChannel <- m:
+	case c.u.messageQueue <- m:
 	default:
 		logrus.Fatal("message is discard because the queue is full")
 	}
@@ -87,7 +88,7 @@ func (c *channel) notifyNewUser(u dao.User) {
 		},
 	}
 	select {
-	case c.receiveChannel <- m:
+	case c.u.messageQueue <- m:
 	default:
 		logrus.Fatalf("Message [%+v]  is discard because the queue is full", m)
 	}
@@ -99,7 +100,7 @@ func (c *channel) notifyUserOnline(id int) {
 		body:  id,
 	}
 	select {
-	case c.receiveChannel <- m:
+	case c.u.messageQueue <- m:
 	default:
 		logrus.Fatalf("Message [%+v]  is discard because the queue is full", m)
 	}
@@ -111,7 +112,7 @@ func (c *channel) notifyUserOffline(id int) {
 		body:  id,
 	}
 	select {
-	case c.receiveChannel <- m:
+	case c.u.messageQueue <- m:
 	default:
 		logrus.Fatalf("Message [%+v]  is discard because the queue is full", m)
 	}
