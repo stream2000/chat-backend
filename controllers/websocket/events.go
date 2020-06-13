@@ -47,6 +47,19 @@ func OnDisconnect(s socketio.Conn, msg string) {
 	}
 }
 
+func OnDefaultGroupMessage(s socketio.Conn, msg PushMessage) {
+	msg.Text = strings.Replace(msg.Text, "\n", "", -1)
+	senderChan, _ := channelManager.getChannelByCid(s.ID())
+	channelManager.Lock()
+	for _, u := range channelManager.users {
+		if u.id == senderChan.u.id {
+			continue
+		}
+		u.sendNewGroupMessage(senderChan.u.id, msg.Text)
+	}
+	channelManager.Unlock()
+}
+
 func OnNewMessage(s socketio.Conn, msg PushMessage) {
 	msg.Text = strings.Replace(msg.Text, "\n", "", -1)
 	if receiver, ok := channelManager.getUserByUserId(strconv.Itoa(msg.ReceiverId)); ok {

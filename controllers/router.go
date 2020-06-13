@@ -72,5 +72,6 @@ func InitWebSocketRouter() *socketio.Server {
 	server.OnEvent("/", "login", events.OnAuth)
 	server.OnEvent("/", "logoff", events.OnLogOff)
 	server.OnEvent("/", "msg", events.OnNewMessage)
+	server.OnEvent("/", "group", events.OnDefaultGroupMessage)
 	return server
 }
