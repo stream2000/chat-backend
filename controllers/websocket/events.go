@@ -36,7 +36,7 @@ func OnLogOff(s socketio.Conn) {
 		log.Info("User with id ", c.u.id, " signed off")
 		channelManager.removeChannelByCid(s.ID())
 	} else {
-		log.Fatal("can't get channel by cid ", s.ID())
+		log.Error("can't get channel by cid ", s.ID())
 	}
 }
 

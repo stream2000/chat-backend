@@ -30,7 +30,7 @@ func (u *user) sendNewMessage(sender string, text string) {
 	select {
 	case u.messageQueue <- m:
 	default:
-		logrus.Fatal("message is discard because the queue is full")
+		logrus.Error("message is discard because the queue is full")
 	}
 }
 func (u *user) sendNewGroupMessage(sender string, text string) {
@@ -45,7 +45,7 @@ func (u *user) sendNewGroupMessage(sender string, text string) {
 	select {
 	case u.messageQueue <- m:
 	default:
-		logrus.Fatal("message is discard because the queue is full")
+		logrus.Error("message is discard because the queue is full")
 	}
 }
 
@@ -89,7 +89,7 @@ func (c *channel) sendNewMessage(text string) {
 	select {
 	case c.u.messageQueue <- m:
 	default:
-		logrus.Fatal("message is discard because the queue is full")
+		logrus.Error("message is discard because the queue is full")
 	}
 }
 
@@ -105,7 +105,7 @@ func (c *channel) notifyNewUser(u dao.User) {
 	select {
 	case c.u.messageQueue <- m:
 	default:
-		logrus.Fatalf("Message [%v]  is discard because the queue is full", m)
+		logrus.Errorf("Message [%v]  is discard because the queue is full", m)
 	}
 }
 
@@ -117,7 +117,7 @@ func (c *channel) notifyUserOnline(id int) {
 	select {
 	case c.u.messageQueue <- m:
 	default:
-		logrus.Fatalf("Message [%v]  is discard because the queue is full", m)
+		logrus.Errorf("Message [%v]  is discard because the queue is full", m)
 	}
 }
 
@@ -129,6 +129,6 @@ func (c *channel) notifyUserOffline(id int) {
 	select {
 	case c.u.messageQueue <- m:
 	default:
-		logrus.Fatalf("Message [%v]  is discard because the queue is full", m)
+		logrus.Errorf("Message [%v]  is discard because the queue is full", m)
 	}
 }
