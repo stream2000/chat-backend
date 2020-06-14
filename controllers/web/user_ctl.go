@@ -11,6 +11,7 @@ import (
 	"m4-im/pkg/e"
 	"m4-im/pkg/middleware"
 	"m4-im/pkg/response"
+	"m4-im/pkg/setting"
 	"m4-im/pkg/util"
 	"net/http"
 	"strconv"
@@ -30,6 +31,10 @@ func Auth(c *gin.Context) {
 	}
 	db.Table("user").Where("account = ?", param.Account).First(&u)
 	if u.Id <= 0 {
+		if !setting.ServerSetting.EnableRegistration {
+			rsp.SetCode(e.ErrBasicAuthFailed).OK()
+			return
+		}
 		u.PassWd = param.Password
 		u.AvatarUrl = "/static/3.jpg"
 		db.Create(u)
