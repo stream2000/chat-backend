@@ -55,7 +55,7 @@ func OnDefaultGroupMessage(s socketio.Conn, msg PushMessage) {
 		if u.id == senderChan.u.id {
 			continue
 		}
-		u.sendNewGroupMessage(senderChan.u.id, msg.Text)
+		u.sendNewGroupMessage(senderChan.u.id, msg.Text, msg.Date)
 	}
 	channelManager.Unlock()
 }
@@ -65,7 +65,7 @@ func OnNewMessage(s socketio.Conn, msg PushMessage) {
 	if receiver, ok := channelManager.getUserByUserId(strconv.Itoa(msg.ReceiverId)); ok {
 		senderChan, _ := channelManager.getChannelByCid(s.ID())
 		log.Infof("[%s:%s] -> [%s:%s] : %s", senderChan.u.name, senderChan.u.id, receiver.name, receiver.id, msg.Text)
-		receiver.sendNewMessage(senderChan.u.id, msg.Text)
+		receiver.sendNewMessage(senderChan.u.id, msg.Text, msg.Date)
 	} else {
 		badCondition()
 	}

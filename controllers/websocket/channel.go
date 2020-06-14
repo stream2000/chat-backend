@@ -18,13 +18,14 @@ type user struct {
 	messageQueue chan message
 }
 
-func (u *user) sendNewMessage(sender string, text string) {
+func (u *user) sendNewMessage(sender string, text string, date int64) {
 	m := message{
 		topic: "msg",
 		body: map[string]interface{}{
 			"sender_id": sender,
 			"text":      text,
 			"type":      "private",
+			"date":      date,
 		},
 	}
 	select {
@@ -33,13 +34,14 @@ func (u *user) sendNewMessage(sender string, text string) {
 		logrus.Error("message is discard because the queue is full")
 	}
 }
-func (u *user) sendNewGroupMessage(sender string, text string) {
+func (u *user) sendNewGroupMessage(sender string, text string, date int64) {
 	m := message{
 		topic: "msg",
 		body: map[string]interface{}{
 			"sender_id": sender,
 			"text":      text,
 			"type":      "group",
+			"date":      date,
 		},
 	}
 	select {

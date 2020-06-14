@@ -15,4 +15,5 @@ type LogOffParam struct {
 type PushMessage struct {
 	Text       string `json:"text"`
 	ReceiverId int    `json:"receiver_id"`
+	Date       int64  `json:"date"`
 }
