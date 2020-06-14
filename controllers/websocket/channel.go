@@ -102,11 +102,7 @@ func (c *channel) notifyNewUser(u dao.User) {
 			"name": u.AvatarUrl,
 		},
 	}
-	select {
-	case c.u.messageQueue <- m:
-	default:
-		logrus.Errorf("Message [%v]  is discard because the queue is full", m)
-	}
+	c.socket.Emit(m.topic, m.body)
 }
 
 func (c *channel) notifyUserOnline(id int) {
@@ -114,11 +110,7 @@ func (c *channel) notifyUserOnline(id int) {
 		topic: "online",
 		body:  id,
 	}
-	select {
-	case c.u.messageQueue <- m:
-	default:
-		logrus.Errorf("Message [%v]  is discard because the queue is full", m)
-	}
+	c.socket.Emit(m.topic, m.body)
 }
 
 func (c *channel) notifyUserOffline(id int) {
@@ -126,9 +118,5 @@ func (c *channel) notifyUserOffline(id int) {
 		topic: "offline",
 		body:  id,
 	}
-	select {
-	case c.u.messageQueue <- m:
-	default:
-		logrus.Errorf("Message [%v]  is discard because the queue is full", m)
-	}
+	c.socket.Emit(m.topic, m.body)
 }

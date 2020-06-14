@@ -9,12 +9,13 @@ import (
 	"m4-im/dao"
 	"strconv"
 	"sync"
+	"time"
 )
 
 var channelManager = &ChannelManager{
 	cIdToChannel:    make(map[string]*channel),
 	userIdToChannel: make(map[string]*channel),
-	users:           map[string](*user){},
+	users:           map[string]*user{},
 }
 
 func SetUpChannelManager() {
@@ -36,6 +37,7 @@ func AddNewUser(u dao.User) {
 	for _, currentUser := range channelManager.userIdToChannel {
 		currentUser.notifyNewUser(u)
 	}
+	time.Sleep(time.Millisecond * 500)
 	channelManager.users[strconv.Itoa(u.Id)] = user
 	channelManager.Unlock()
 }
@@ -54,24 +56,32 @@ func (m *ChannelManager) addNewChannel(c *channel, id string) {
 	} else {
 		panic("unknown new user !!!!!")
 	}
-	for _, c := range channelManager.userIdToChannel {
-		id, _ := strconv.ParseInt(c.u.id, 10, 32)
-		c.notifyUserOffline(int(id))
+
+	if previousChan, ok := m.userIdToChannel[c.u.id]; ok {
+		previousChan.socket.Emit("kick")
+		delete(m.userIdToChannel, previousChan.u.id)
+		delete(m.cIdToChannel, previousChan.socket.ID())
 	}
+	for _, ch := range channelManager.userIdToChannel {
+
+		id, _ := strconv.ParseInt(c.u.id, 10, 32)
+		ch.notifyUserOnline(int(id))
+	}
+	logrus.Infof("channel id: [%s] user id : [%s]\n", c.socket.ID(), c.u.id)
 	m.cIdToChannel[c.socket.ID()] = c
 	m.userIdToChannel[c.u.id] = c
 	m.Unlock()
 }
 
 func (m *ChannelManager) removeChannelByCid(id string) {
-	logrus.Info("Remove channel with user id: ", id)
 	m.Lock()
 	defer m.Unlock()
 	if channel, ok := m.cIdToChannel[id]; ok {
-		delete(m.userIdToChannel, id)
+		logrus.Info("Remove channel with user id: ", channel.u.id)
+		delete(m.userIdToChannel, channel.u.id)
 		delete(m.cIdToChannel, channel.socket.ID())
 		channel.close()
-		idInInt, _ := strconv.ParseInt(id, 10, 32)
+		idInInt, _ := strconv.ParseInt(channel.u.id, 10, 32)
 		for _, c := range m.userIdToChannel {
 			c.notifyUserOffline(int(idInInt))
 		}
